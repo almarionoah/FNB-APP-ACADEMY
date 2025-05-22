@@ -133,6 +133,7 @@ a.info-box{
     margin-top : 12px;
     padding    : 10px;
     overflow:  scroll;
+    padding-bottom: 50px;
 }
 
 #info-box-full img{
