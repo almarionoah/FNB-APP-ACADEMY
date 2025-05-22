@@ -131,9 +131,12 @@ a.info-box{
     display : block;
     margin  : auto;
     margin-top : 12px;
-    padding    : 10px;
+    padding    : 110px;
     overflow:  scroll;
-    padding-bottom: 50px;
+}
+
+.info-box-full {
+    padding: 110px;
 }
 
 #info-box-full img{
