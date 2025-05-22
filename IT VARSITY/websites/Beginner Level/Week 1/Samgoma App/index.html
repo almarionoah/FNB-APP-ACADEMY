@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="icon" type="image/x-icon" href="./images/logo.png" />
+    <style>
+      #splash{
+        background-color: white;
+        text-align: center;
+        align-items: center;
+        align-self: center;
+        align-content: center;
+        height: 100vh;
+      }
+        body{
+            background-image: url("images/the-phantom-menace.gif");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: cover;
+            height: 100vh;
+            width: 100vw;
+        }
+        .title{
+          position: relative;
+          overflow: hidden;
+          white-space: nowrap;
+          margin: 0 auto;
+          letter-spacing: .15em;
+          font-size: 48pt;
+          color: black;
+          animation: typeout 10s steps(30,end);
+        }
+
+        @keyframes typeout {
+         from{ width: 0;}
+         to{width: 100%;}
+          
+        }
+
+        #header{
+            font-size: 25pt;
+            font-weight: bold;
+        }
+        #container{
+            display: none;
+            background-color: gainsboro;
+            margin-left: 15%;
+            width: 80vw;
+            height: 80vh;
+            border-radius: 99px;
+            opacity: 0.8;
+            align-items: center;
+            align-self: center;
+            align-content: center;
+            text-align: center;
+        }
+        #yoda{
+            float: left;
+            height: 200px;
+            width: 250px;
+            margin-top: 5%;
+        }
+        #askQuestion{
+            margin-top: 5%;
+            border-radius: 999px;
+            background-color: cyan;
+            font-size: 19pt;
+            border-style: solid;
+            border-width: 5px;
+        }
+        #panel{
+          align-items: center;
+          align-self: center;
+          align-content: center;
+          text-align: center;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+  <script>
+    let canvas;
+    let ctx;
+    let messages = [
+      "Yes",
+      "No",
+      "Maybe",
+      "Take a chill pill",
+      "The force is with you",
+      "Uncertain principle"
+    ];
+    let currentIndex = 0;
+    let isRolling = false;
+
+    $(document).ready(()=>{
+     this.canvas = document.getElementById('fate');
+     this.ctx = this.canvas.getContext('2d');
+    // Initial draw
+    this.drawDie(messages[currentIndex]);
+    setTimeout(()=>{
+        let splash = document.getElementById('splash');
+        let app = document.getElementById('container');
+        splash.style.display = "none";
+        app.style.display = "block";
+      },6000);
+    
+});
+function drawDie(text) {
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      // Draw cube-like rectangle
+      this.ctx.fillStyle = "#800000";
+      this.ctx.strokeStyle = "#FFD700";
+      this.ctx.lineWidth = 5;
+      this.ctx.fillRect(90, 10, 100, 100);
+      this.ctx.strokeRect(90, 10, 100, 100);
+
+      // Add metallic gradient
+      let gradient = this.ctx.createLinearGradient(100, 100, 300, 300);
+      gradient.addColorStop(0, "#b22222");
+      gradient.addColorStop(1, "#330000");
+      this.ctx.fillStyle = gradient;
+      this.ctx.fillRect(90, 10, 100, 100);
+
+      // Engraved text
+      this.ctx.fillStyle = "#FFD700";
+      this.ctx.font = "20px Georgia";
+      this.ctx.textAlign = "center";
+      this.ctx.textBaseline = "middle";
+      this.ctx.fillText(text, 140, 60);
+    }
+
+    function rollDice() {
+      if (isRolling) return;
+      isRolling = true;
+      let rollCount = 20;
+      let interval = setInterval(() => {
+        currentIndex = Math.floor(Math.random() * 6);
+        drawDie(messages[currentIndex]);
+        rollCount--;
+        if (rollCount <= 0) {
+          isRolling = false;
+          clearInterval(interval);
+          
+        }
+      }, 100);
+    }
+
+    
+  </script>
+</head>
+<body>
+<section id="splash">
+ <img src="./images/logo.png" width="150" height="150"> <label id="title" class="title"><span style="text-decoration: underline;">S</span>amgoma</label>
+</section>
+<section id="container">
+    <label id="header">Ask Me A Question</label>
+    <img src="images/gregor-ruf-yoda-render-01-removebg-preview.png" id="yoda">
+    <div id="panel">
+        <button type="button" id="askQuestion" onclick="rollDice()">Click For A Response</button><br/>
+        <canvas id="fate" style="background-color: darkgray;"></canvas>
+    </div>
+</section>   
+</body>
+</html>
