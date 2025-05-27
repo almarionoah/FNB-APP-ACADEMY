@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css" />       
+    </head>
+    <body>
+        <div id="panel">
+            <p id="heading">Welcome. Please log in</p>
+            <form id="loginPage">
+                <label for=”usernameInput”>Username:</label>&nbsp;<input type=”text” id="usernameInput" /><br/>
+                <label for=”passwordInput”>Password: </label>&nbsp;<input type=”password” id="passwordInput"/><br/>
+                <p id="message"></p>
+                <a href="#" onclick="verifyUser()">Log in</a>
+            </form>
+        </div>
+    </body>
+    
+</html>
+<!--
+Script tag must come after html tag as the html elements are not loaded yet
+when script tag is nested in head tag or within body tag
+-->
+<script>
+    function verifyUser()
+    {
+     
+     var username = document.getElementById("usernameInput").value;
+     var password = document.getElementById("passwordInput").value;
+
+     this.checkUserCreds(username,password);
+    }
+    function checkUserCreds(username, password) 
+    {
+     var systemUsername = "Bond";
+     var systemPassword = "007";
+     if(username == systemUsername && password == systemPassword)
+     {
+       document.getElementById("message").innerHTML = "Correct. Logging you in !";
+     }
+     else
+     {
+      document.getElementById("message").innerHTML = "* Username or password is/are incorrect";
+     }
+    }
+ </script>

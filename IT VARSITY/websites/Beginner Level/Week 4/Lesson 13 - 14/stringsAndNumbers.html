@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+    <body>
+        <p id="outputText"></p>
+    </body>
+
+</html>
+<script>
+    //Example 1
+    var text1 = "4";
+    var text2 = "5";
+    document.getElementById("outputText").innerHTML = (text1 + text2);
+    //Example 2
+    text1 = "hello";
+    text2 = "5";
+    document.getElementById("outputText").innerHTML = (text1 + text2);
+    //Example 3
+    text1 = "10";
+    text2 = "5";
+    document.getElementById("outputText").innerHTML = (text1 - text2);
+     //Example 4
+    text1 = "10";
+    text2 = "2";
+    document.getElementById("outputText").innerHTML = (text1 * text2); //only if text can be converted to a number
+     //Example 5
+    text1 = "10";
+    text2 = "2";
+    document.getElementById("outputText").innerHTML = (text1 / text2); //only if text can be converted to a number
+    //Example 6
+    text1 = "ten";
+    text2 = "2";
+    document.getElementById("outputText").innerHTML = (text1 - text2); //return NaN
+    //Example 7
+    text1 = "10";
+    text2 = "2";
+    document.getElementById("outputText").innerHTML = (text1 % text2); //The remainder function works only if text can be converted to a number
+
+    //Lesson 14
+    //Example 1
+    text1 = "ten";
+    text2 = "2";
+    document.getElementById("outputText").innerHTML = (text1 - text2); //return NaN
+    //Example 2
+    text1 = "10";
+    text2 = "2";
+
+    var num1 = stringToNumber(text1);
+    var num2 = stringToNumber(text2);
+
+    function stringToNumber(text){
+      return parseInt(text);  
+    }
+
+    document.getElementById("outputText").innerHTML = (num1 + num2); //should return 12
+</script>
