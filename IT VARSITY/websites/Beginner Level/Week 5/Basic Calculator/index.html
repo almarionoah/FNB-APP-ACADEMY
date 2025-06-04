@@ -9,6 +9,11 @@
            <td colspan="4"> <input type="text" id="inputBox" value="0" /></td>
         </tr>
         <tr>
+            <td colspan="4"> 
+                BODMAS<br/>
+               OFF <input type="range" step="100" min="0" max="100" value="0" id="bodmasSwitch"/> ON </td>
+        </tr>
+        <tr>
             <td class="digitButton" onclick="digitBtnPressed(7)">7</td>
             <td class="digitButton" onclick="digitBtnPressed(8)">8</td>
             <td class="digitButton" onclick="digitBtnPressed(9)">9</td>
@@ -27,12 +32,14 @@
             <td class="operatorButton" onclick="operatorBtnPressed('+')">+</td>
         </tr>
         <tr>
-            <td class="digitButton" colspan="2" onclick="digitBtnPressed(0)">0</td>
+            <td class="digitButton" onclick="digitBtnPressed(0)">0</td>
+            <td class="digitButton" onclick="digitBtnPressed('.')">.</td>
             <td class="ACButton" onclick="btnACPressed()">AC</td>
             <td class="operatorButton" onclick="operatorBtnPressed('/')">/</td>
         </tr>
         <tr>
-            <td class="operatorButton" colspan="4" onclick="equalsButtonPresseed()">=</td> 
+            <td class="operatorButton" colspan="2" onclick="operatorBtnPressed('%')">%</td> 
+            <td class="operatorButton" colspan="2" onclick="equalsButtonPresseed()">=</td> 
         </tr>
      </table>
     </body>
@@ -43,6 +50,8 @@
     var values = new Array();
     var operators = new Array();
     var input = document.getElementById("inputBox");
+    var isBodmas = document.getElementById("bodmasSwitch");
+
     function digitBtnPressed(button){
        if(this.newLine == true){
         this.input !== null && this.input !== undefined ? this.input.value = button : 0;
@@ -69,34 +78,97 @@
 
     function operatorBtnPressed(button){
         if(this.input !== null && this.input !== undefined){
-         this.operators.push(button);
-         this.values.push(parseInt(input.value));
-         this.newLine = true;
+        
+         
+         if(button == "%"){
+            let computation = (Number(input.value)/100);
+            this.input.value = computation;
+         }
+         else{
+            this.values.push(Number(input.value));
+            this.operators.push(button);
+            this.newLine = true;
+            this.input.value = 0;
+         }
+         
+
         }
     }
 
     function equalsButtonPresseed(){
       if(this.input !== null && this.input !== undefined){
-        this.values.push(parseInt(this.input.value));
-        var finalTotal = this.values[0];
-        for(var i=0;i<=(this.values.length-1);i++){
-            var value2 = this.values[(i+1)];
-            var operator = (this.operators)[i]
-            switch (operator) {
+        this.values.push(Number(this.input.value));
+        var finalTotal;
+        if(this.isBodmas !== null && this.isBodmas !== undefined && Number(this.isBodmas.value) == 100)
+        {
+           var numberOfOperatorsLeft = this.operators.length;
+           var tempTotal; 
+           
+          while(numberOfOperatorsLeft > 0)
+          {
+                operatorIndex = this.operators.indexOf("x");
+                if(operatorIndex == -1){
+                operatorIndex = this.operators.indexOf("/");
+                if(operatorIndex == -1){
+                    operatorIndex = this.operators.indexOf("+");
+                    if(operatorIndex == -1){
+                        operatorIndex = this.operators.indexOf("-");
+                    }
+                }
+             }
+             var value1 = this.values[operatorIndex];
+            var value2 = this.values[(operatorIndex+1)];
+            switch (this.operators[operatorIndex]) {
             case "+":
-                finalTotal += value2;
+                tempTotal = (value1 + value2);
                 break;
             case "-":
-                finalTotal -= value2;
+                tempTotal = (value1 - value2);
                 break;
             case "x":
-                finalTotal *= value2;
+                tempTotal = (value1 * value2) ;
                 break;
             case "/":
+                tempTotal =  (value1 / value2);
+                break;
+            }
+            this.values.splice(operatorIndex,2,tempTotal);
+            
+            this.operators.splice(operatorIndex,1);
+            numberOfOperatorsLeft--;
+            
+          }
+          finalTotal = values[0];
+        }
+       else
+       {
+         finalTotal = this.values[0];
+         for(var i=0;i<=(this.values.length-1);i++)
+         {
+            
+            var value2 = this.values[(i+1)];
+            var operator = (this.operators)[i]
+            switch (operator) 
+            {
+             case "+":
+                finalTotal += value2;
+                break;
+             case "-":
+                finalTotal -= value2;
+                break;
+             case "x":
+                finalTotal *= value2;
+                break;
+             case "/":
                 finalTotal /=  value2;
                 break;
-         }
+             case "%": 
+             
+             break;
+          }
         }
+        }
+        
         input.value = finalTotal;
         this.newLine = true;
         this.values = new Array();
