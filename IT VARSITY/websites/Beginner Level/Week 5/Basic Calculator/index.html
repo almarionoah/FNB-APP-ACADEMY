@@ -2,16 +2,54 @@
 <html>
     <head>
         <link rel="stylesheet" href="styles.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        
     </head>
     <body>
      <table>
         <tr>
            <td colspan="4"> <input type="text" id="inputBox" value="0" /></td>
         </tr>
-        <tr>
-            <td colspan="4"> 
+        <tr style="font-size: 18pt">
+            <td colspan="1"> 
                 BODMAS<br/>
-               OFF <input type="range" step="100" min="0" max="100" value="0" id="bodmasSwitch"/> ON </td>
+               OFF <input type="range" step="100" min="0" max="100" value="0" id="bodmasSwitch"/> ON
+             </td>
+              <td colspan="2">
+                ANGLES<br/>
+                DEGREE <input type="range" step="100" min="0" max="100" value="0"  id="angleSwitch"/> RADIANCE
+             </td>
+            <td colspan="2">
+                ADVANCED FEATURES<br/>
+                OFF <input type="range" step="100" min="0" max="100" value="0" id="advancedPanelSwitch" onchange="toggleAdvancedPanel()"/> ON
+             </td>
+        </tr>
+        
+        <tr class="advancedPanel" name="advancedPanel">
+            <td class="operatorButton"  onclick="operatorBtnPressed('^')">POW</td>
+            <td class="operatorButton"  onclick="operatorBtnPressed('sqr')">ROOT</td>
+            <td class="operatorButton" onclick="operatorBtnPressed('sin')">SINE</td>
+            <td class="operatorButton"  onclick="operatorBtnPressed('cos')">COSINE</td>
+            
+        </tr>
+        <tr class="advancedPanel" name="advancedPanel">
+            <td class="operatorButton"  onclick="operatorBtnPressed('tan')">TAN</td>
+            <td class="operatorButton"  onclick="operatorBtnPressed('cot')">COT</td>
+            <td class="operatorButton"  onclick="operatorBtnPressed('sec')">SEC</td>
+            <td class="operatorButton"  onclick="operatorBtnPressed('cosec')">COSEC</td>
+            
+        </tr>
+        <tr class="advancedPanel" name="advancedPanel">
+          <td class="operatorButton"  onclick="operatorBtnPressed('log')">LOG</td>
+            <td class="operatorButton"  onclick="operatorBtnPressed('ln')">LN</td>
+            <td class="operatorButton"  onclick="operatorBtnPressed('exp')">e<sup>X</sup></td>
+            <td class="operatorButton"  onclick="operatorBtnPressed('rem')"> <i class="fa fa-arrow-left" aria-hidden="true"></i></td>  
+        </tr>
+        <tr class="advancedPanel" name="advancedPanel">
+            <td class="operatorButton"  onclick="operatorBtnPressed('!')">Fact</td>
+            <td class="operatorButton" onclick="operatorBtnPressed('hcf')">HCF</td>
+            <td class="operatorButton" onclick="operatorBtnPressed('lcm')">LCM</td>
+            <td class="operatorButton" onclick="operatorBtnPressed('primef')">Prime</td> 
         </tr>
         <tr>
             <td class="digitButton" onclick="digitBtnPressed(7)">7</td>
@@ -38,7 +76,8 @@
             <td class="operatorButton" onclick="operatorBtnPressed('/')">/</td>
         </tr>
         <tr>
-            <td class="operatorButton" colspan="2" onclick="operatorBtnPressed('%')">%</td> 
+            <td class="operatorButton" colspan="2" onclick="operatorBtnPressed('%')" id="percentage">%</td> 
+            <td colspan="1" onclick="operatorBtnPressed(',')" id="comma" hidden>,</td> 
             <td class="operatorButton" colspan="2" onclick="equalsButtonPresseed()">=</td> 
         </tr>
      </table>
@@ -78,33 +117,229 @@
 
     function operatorBtnPressed(button){
         if(this.input !== null && this.input !== undefined){
-        
-         
-         if(button == "%"){
-            let computation = (Number(input.value)/100);
-            this.input.value = computation;
-         }
-         else{
-            this.values.push(Number(input.value));
+        var computation;
+        var isDegrees = document.getElementById("angleSwitch").value;
+         switch(button){
+            case "%": 
+            computation = (Number(this.input.value)/100);
+            this.input.value = computation !== null && computation !== undefined && this.input.value.includes("ERROR") !== true ? computation : "ERROR";
+            break;
+            case ",":
+              this.input.value += ","  
+            break;
+            case "^":
+            tempValue = this.input.value;
+            if(tempValue.indexOf("^") !== -1){
+                var constants = this.input.value.split("^");
+                let value1 = 
+                tempValue = Math.pow(Number(constants[0]),Number(constants[1]));
+            }
+             this.input.value = tempValue !== null && tempValue !== undefined && tempValue.includes("ERROR") !== true ? tempValue + "^" : "ERROR";   
+            break;
+            case "sqr":
+            computation = Math.sqrt(Number(this.input.value));
+            this.input.value = computation !== null && computation !== undefined && this.input.value.includes("ERROR") !== true ? computation : "ERROR";
+            break;
+            case "sin":
+            computation = isDegrees == 0 ? Math.sin((Math.PI/180)*Number(this.input.value)) : Math.sin(Number(this.input.value)); 
+            this.input.value = computation !== null && computation !== undefined && this.input.value.includes("ERROR") !== true ? computation : "ERROR";
+            break;
+            case "cos":
+            computation = isDegrees == 0 ? Math.cos((Math.PI/180)*Number(this.input.value)) : Math.cos(Number(this.input.value));
+            this.input.value = computation !== null && computation !== undefined && this.input.value.includes("ERROR") !== true ? computation : "ERROR";   
+            break;
+            case "tan":
+            computation = isDegrees == 0 ? Math.tan((Math.PI/180)*Number(this.input.value)) : Math.tan(Number(this.input.value));
+            this.input.value = computation !== null && computation !== undefined && this.input.value.includes("ERROR") !== true ? computation : "ERROR";  
+            break;
+            case "cot":
+            computation = isDegrees == 0 ? (1/Math.tan((Math.PI/180)*Number(this.input.value))) : (1/Math.tan(Number(this.input.value))) ;
+            this.input.value = computation !== null && computation !== undefined && this.input.value.includes("ERROR") !== true ? computation : "ERROR";  
+            break;
+            case "sec":
+            computation = isDegrees == 0 ? (1/Math.cos((Math.PI/180)*Number(this.input.value))) : (1/Math.cos(Number(this.input.value)));
+            this.input.value = computation !== null && computation !== undefined && this.input.value.includes("ERROR") !== true ? computation : "ERROR";  
+            break;
+            case "cosec":
+            computation = isDegrees == 0 ? (1/Math.sin((Math.PI/180)*Number(this.input.value))) : (1/Math.sin(Number(this.input.value)));
+            this.input.value = computation !== null && computation !== undefined && this.input.value.includes("ERROR") !== true ? computation : "ERROR";    
+            break;
+            case "log": 
+            computation = (Math.log(Number(this.input.value)));
+            this.input.value = computation !== null && computation !== undefined && this.input.value.includes("ERROR") !== true ? computation : "ERROR";
+            break;
+            case "ln": 
+            computation = (Math.LN10(Number(this.input.value)));
+            this.input.value = computation !== null && computation !== undefined && this.input.value.includes("ERROR") !== true ? computation : "ERROR";
+            break;
+            case "!":
+             computation = 1;
+             var n = parseInt(this.input.value);
+             if(n !== null && n !== undefined){
+             while(n > 0){
+              computation *= n;
+              n--;
+             } 
+             this.input.value = computation !== null && computation !== undefined && this.input.value.includes("ERROR") !== true ? computation : "ERROR"; 
+             }
+            
+            break;
+            case "hcf":
+                computation = 1;
+                constants = this.input.value.split(",");
+               constants.forEach((val)=>{
+                computation *= Number(val);
+               });
+               this.input.value = computation !== null && computation !== undefined && this.input.value.includes("ERROR") !== true ? computation : "ERROR"; 
+            break;
+            case "lcm": 
+                computation = 1;
+                var constants = this.input.value.split(",").sort((a,b)=>{
+                    return Number(a) < Number(b);
+                });
+
+                constants.forEach((number)=>{
+                    if(number  == 0){
+                        computation = 0;
+                    }
+                });
+
+                if(constants !== null && constants !== undefined){
+                     var factors = new Array();
+               for(let i=0;i<constants.length;i++){
+                 for(let j=0;j<constants.length;j++){
+                    if(constants[i]!==constants[j]){
+                        if((constants[j] % constants[i] == 0)){
+                            factors.push(constants[i]);
+                        }
+                    }
+                 }
+               }
+               if(factors.length > 0){
+               for(var i = 0;i<factors.length;i++){
+                computation *= factors[i];
+               }
+              }
+              else{
+                constants.forEach((number)=>{
+                    computation *= number;
+                });
+              }
+           }
+            this.input.value = computation;  
+            break;
+            case "primef":
+                var n = 2;
+                var inputValue = parseInt(this.input.value);
+                var factors = new Array();
+                var output = "";
+                if(inputValue !== null && inputValue !== undefined){
+                while(n < inputValue){
+                    if((inputValue % n)==0){
+                        factors.push(n);
+                    }
+                    if(factors.length > 0){
+                    for(var  i=0;i<factors.length;i++){
+                            
+                            if(((n%factors[i]) === 0) && n != factors[i]){
+                                factors.forEach((number,index)=>{
+                                    if(number == n){
+                                      factors.splice(index,1);
+                                    }
+                                });
+                            }
+                            n++;
+                        }
+                    }
+                    else{
+                        n++;
+                    }
+                       
+                        
+                    
+                    
+                }
+                
+                if(n == inputValue && factors.length == 0){
+                    this.input.value = n;
+                }
+
+       if(factors.length > 0){
+        for(var i = 0;i<factors.length;i++){
+                    if(i < (factors.length-1)){
+                        output += factors[i] + ",";
+                    }
+                    else{
+                        output += factors[i];
+                    }
+                }
+                this.input.value = output;
+       }         
+                
+     }
+     else{
+                this.input.value = "ERROR. NOT AN INTEGER"
+     }
+            break;
+            case "exp":
+              computation = Math.exp(Number(this.input.value));
+              this.input.value = computation;  
+            break;
+            case "rem":
+              var newInput = this.input.value.substring(0,this.input.value.length-1);
+              this.input.value = newInput.trim().length == 0 ? 0 : newInput; 
+              if(Number(this.input.value) == 0){
+                this.newLine = true;
+              } 
+            break;
+            default:
+            tempValue = this.input.value;
+            if(this.input.value.indexOf("^") !== -1){
+                let constants = this.input.value.split("^");
+                tempValue = Math.pow(Number(constants[0]),Number(constants[1]));
+            }
+            if(tempValue !== null && tempValue !== undefined){
+            this.values.push(Number(tempValue));
             this.operators.push(button);
             this.newLine = true;
             this.input.value = 0;
+            }
+            else{
+                this.input.value = "Input Error";
+            }
+            
+            break;
          }
+
+         
+         
          
 
         }
     }
 
     function equalsButtonPresseed(){
-      if(this.input !== null && this.input !== undefined){
-        this.values.push(Number(this.input.value));
         var finalTotal;
+
+      if(this.input !== null && this.input !== undefined && this.input.value.includes("ERROR") != true)
+      {
+        if(this.input.value.indexOf("^") !== -1)
+        {
+           var constants = this.input.value.split("^");
+           var num1 = Number(constants[0]);
+           var num2 = Number(constants[1]);
+           if(num1 !== null && num1 !== undefined && num2 !== null && num2 !== undefined){
+            this.input.value = (Math.pow(num1,num2));
+           } 
+        }
         if(this.isBodmas !== null && this.isBodmas !== undefined && Number(this.isBodmas.value) == 100)
         {
+            console.log("here 1");
+           this.values.push(Number(this.input.value));
+           console.log(this.values);
            var numberOfOperatorsLeft = this.operators.length;
            var tempTotal; 
-           
-          while(numberOfOperatorsLeft > 0)
+           while(numberOfOperatorsLeft > 0)
           {
                 operatorIndex = this.operators.indexOf("x");
                 if(operatorIndex == -1){
@@ -138,16 +373,21 @@
             numberOfOperatorsLeft--;
             
           }
-          finalTotal = values[0];
+          if(numberOfOperatorsLeft == 0){
+            finalTotal = this.values[0];
+          }
+          
         }
        else
        {
-         finalTotal = this.values[0];
-         for(var i=0;i<=(this.values.length-1);i++)
-         {
+            this.values.push(Number(this.input.value));
+            finalTotal = this.values[0];
+            if(this.operators.length > 0){
+            for(var i=0;i<=(this.values.length-1);i++)
+            {
             
-            var value2 = this.values[(i+1)];
-            var operator = (this.operators)[i]
+             var value2 = this.values[(i+1)];
+             var operator = (this.operators)[i]
             switch (operator) 
             {
              case "+":
@@ -162,17 +402,59 @@
              case "/":
                 finalTotal /=  value2;
                 break;
-             case "%": 
-             
-             break;
           }
-        }
-        }
+           }
+            }
+            else{
+                finalTotal = this.input.value;
+            }
+           
         
-        input.value = finalTotal;
+               
+      }
+    
+        this.input.value = finalTotal;
         this.newLine = true;
         this.values = new Array();
         this.operators = new Array();
-     }
+      }
+     
+    }
+
+    function toggleAdvancedPanel(){
+        var showPanel = document.getElementById("advancedPanelSwitch");
+        var panel = document.getElementsByName("advancedPanel");
+        var listOperator = document.getElementById("comma");
+        var percentage = document.getElementById("percentage");
+        if(showPanel !== null && showPanel !== undefined && showPanel.value == 100){
+            
+            if(panel !== null && panel !== undefined){
+                panel.forEach((object)=>{
+                  object.classList = "";
+                });
+            }
+            if(comma !== null && comma !== undefined){
+                comma.classList = "digitButton";
+                comma.removeAttribute("hidden")
+            }
+            if(percentage !== null && comma !== undefined){
+                percentage.colspan = 1;
+            }
+            
+        }
+        if(showPanel !== null && showPanel !== undefined && showPanel.value == 0){
+           if(panel !== null && panel !== undefined){
+                panel.forEach((object)=>{
+                  object.classList = "advancedPanel";
+                });
+            } 
+            if(comma !== null && comma !== undefined){
+                comma.setAttribute("hidden",true);
+            }
+            if(percentage !== null && comma !== undefined){
+                percentage.colspan = 2;
+            }
+            
+        }
     }
  </script>
