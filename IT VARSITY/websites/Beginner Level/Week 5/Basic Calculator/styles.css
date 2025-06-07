@@ -39,3 +39,10 @@ td{
 .ACButton{
     background-color: #656165;
 }
+
+@media only screen and (max-width: 480px) {
+    #app{
+        scale: calc(480/100);
+    }
+    
+}
